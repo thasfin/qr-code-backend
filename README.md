@@ -26,6 +26,17 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Roadmap
+
+- [ ] Integrar alguma lib de QR-CODE
+- [ ] Criar rota POST para receber uma URL e criar o QR-CODE
+- [ ] Salvar o QR-CODE gerado em uma pasta local
+- [ ] Retornar o QR-CODE pela rota de Criação em PNG
+- [ ] Receber parâmetros de estilização (tamanho, extensão, tipo de pontos, etc) na rota POST
+- [ ] exportar QR-CODE em outros formatos.
+- [ ] integrar QR-CODE com o frontend
+- [ ] estilizar Layout do frontend
+
 ## Installation
 
 ```bash
