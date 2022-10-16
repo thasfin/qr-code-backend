@@ -1,6 +1,6 @@
 FROM node:18 as build
 
-RUN sudo apt update && sudo apt install -y curl
+RUN apt update && apt install -y curl
 
 WORKDIR /usr/src/app
 
