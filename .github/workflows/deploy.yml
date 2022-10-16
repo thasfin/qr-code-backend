@@ -1,0 +1,57 @@
+name: CD Gitops
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  build:
+    name: Build and Update
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build, tag, and push image to DockerHub
+        uses: docker/build-push-action@v3
+        env:
+          IMAGE_TAG: ${{ github.ref_name }}-${{ github.sha }}
+        with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ env.IMAGE_TAG }}
+
+      - name: Update Image Tag and Release Name
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: 'helm/values.yaml'
+          propertyPath: 'image.tag'
+          value: ${{ github.ref_name }}-${{ github.sha }}
+          branch: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          message: 'Update Image Version to ${{ github.ref_name }}-${{ github.sha }} and Release Name to ${{ github.event.repository.name }}'
+          changes: |
+            {
+              "helm/Chart.yaml": {
+                "name": "${{ github.event.repository.name }}"
+              },
+              "helm/values.yaml": {
+                "image.repository": "${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}"
+              }
+            }
