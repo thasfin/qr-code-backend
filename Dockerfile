@@ -7,13 +7,13 @@ RUN yarn config set network-timeout 600000
 
 # RUN npm config set registry "http://registry.npmjs.org"
 
-# RUN yarn config set registry "http://registry.npmjs.org"
+RUN yarn config set registry "http://registry.yarnpkg.com"
 
 COPY package*.json yarn.lock ./
 
 COPY prisma ./prisma/
 
-RUN yarn install --frozen-lockfile --production
+RUN yarn install --production
 
 COPY . .
 
