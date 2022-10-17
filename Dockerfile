@@ -22,6 +22,8 @@ RUN yarn config set network-timeout 600000
 
 WORKDIR /usr/src/app
 
+COPY --from=build /src/configs/start-file.txt ./dist/src/configs/
+COPY --from=build /src/configs/status-file.json ./dist/src/configs/
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/package*.json ./
 COPY --from=build /usr/src/app/yarn.lock ./
