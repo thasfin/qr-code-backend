@@ -36,7 +36,6 @@
 - [ ] exportar QR-CODE em outros formatos.
 - [ ] integrar QR-CODE com o frontend
 - [ ] estilizar Layout do frontend
-- [ ] melhorar o README do projeto
 
 ## Installation
 

@@ -1,0 +1,23 @@
+replicaCount: 1
+image:
+  repository: levyam/qr-code-backend
+  pullPolicy: IfNotPresent
+  tag: deploy-92ce9e84dc4316d60e144abccc6f0f628d40a5a8
+service:
+  port: 3001
+  targetPort: 3000
+  name: https
+  protocol: TCP
+ingress:
+  domain: thasfincommunity.com.br
+  enabled: true
+  className: nginx
+  annotations: {}
+  hosts:
+    - paths:
+        - path: /
+clusterIssuer:
+  enabled: true
+  acme:
+    email: community.thasfin@gmail.com
+    server: https://acme-v02.api.letsencrypt.org/directory
