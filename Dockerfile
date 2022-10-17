@@ -1,12 +1,14 @@
-FROM node:18 as build
+FROM node:16 as build
 
-RUN apt update && apt install -y curl
+RUN apt-get -y update && apt install -y curl
 
 WORKDIR /usr/src/app
 
 RUN yarn config set network-timeout 600000
 
 # RUN npm config set registry "http://registry.npmjs.org"
+
+RUN yarn config set strict-ssl false --global
 
 RUN yarn config set registry "http://registry.yarnpkg.com"
 
@@ -18,15 +20,17 @@ RUN yarn --verbose
 
 COPY . .
 
-RUN yarn build --verbose
+RUN yarn build
 
 ### Build production image
 
-FROM node:18 as prod
+FROM node:16 as prod
 
 RUN yarn config set network-timeout 600000
 
 # RUN npm config set registry "http://registry.npmjs.org"
+
+RUN yarn config set strict-ssl false --global
 
 RUN yarn config set registry "http://registry.yarnpkg.com"
 
@@ -37,6 +41,6 @@ COPY --from=build /usr/src/app/package*.json ./
 COPY --from=build /usr/src/app/yarn.lock ./
 COPY --from=build /usr/src/app/prisma ./prisma
 
-RUN yarn install --frozen-lockfile --production --verbose
+RUN yarn install --frozen-lockfile --production
 
 CMD [ "node", "dist/src/main" ]
