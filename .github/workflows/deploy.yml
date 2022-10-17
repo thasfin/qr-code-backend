@@ -8,7 +8,8 @@ on:
 jobs:
   build:
     name: Build and Update
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -20,11 +21,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+      # - name: Set up QEMU
+      #   uses: docker/setup-qemu-action@v2
         
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v2
 
       - name: Build, tag, and push image to DockerHub
         uses: docker/build-push-action@v3
@@ -32,7 +33,7 @@ jobs:
           IMAGE_TAG: ${{ github.ref_name }}-${{ github.sha }}
         with:
           context: .
-          platforms: linux/arm64
+          # platforms: linux/arm64
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ env.IMAGE_TAG }}
