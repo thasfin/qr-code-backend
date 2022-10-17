@@ -1,4 +1,4 @@
-FROM node:16 as build
+FROM node:16-slim as build
 
 WORKDIR /usr/src/app
 
@@ -8,7 +8,7 @@ COPY package*.json yarn.lock ./
 
 COPY prisma ./prisma/
 
-RUN yarn
+RUN yarn --frozen-lockfile
 
 COPY . .
 
@@ -16,7 +16,7 @@ RUN yarn build
 
 ### Build production image
 
-FROM node:16 as prod
+FROM node:16-slim as prod
 
 RUN yarn config set network-timeout 600000
 
@@ -27,6 +27,6 @@ COPY --from=build /usr/src/app/package*.json ./
 COPY --from=build /usr/src/app/yarn.lock ./
 COPY --from=build /usr/src/app/prisma ./prisma
 
-RUN yarn install --production
+RUN yarn install --production --frozen-lockfile
 
 CMD [ "node", "dist/src/main" ]
