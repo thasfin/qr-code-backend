@@ -1,22 +1,14 @@
 FROM node:16 as build
 
-RUN apt-get -y update && apt install -y curl
-
 WORKDIR /usr/src/app
 
 RUN yarn config set network-timeout 600000
-
-# RUN npm config set registry "http://registry.npmjs.org"
-
-RUN yarn config set strict-ssl false --global
-
-RUN yarn config set registry "http://registry.yarnpkg.com"
 
 COPY package*.json yarn.lock ./
 
 COPY prisma ./prisma/
 
-RUN yarn --verbose
+RUN yarn
 
 COPY . .
 
@@ -27,12 +19,6 @@ RUN yarn build
 FROM node:16 as prod
 
 RUN yarn config set network-timeout 600000
-
-# RUN npm config set registry "http://registry.npmjs.org"
-
-RUN yarn config set strict-ssl false --global
-
-RUN yarn config set registry "http://registry.yarnpkg.com"
 
 WORKDIR /usr/src/app
 
