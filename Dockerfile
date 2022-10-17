@@ -27,6 +27,6 @@ COPY --from=build /usr/src/app/package*.json ./
 COPY --from=build /usr/src/app/yarn.lock ./
 COPY --from=build /usr/src/app/prisma ./prisma
 
-RUN yarn install --frozen-lockfile --production
+RUN yarn install --production
 
 CMD [ "node", "dist/src/main" ]
