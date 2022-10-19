@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: levyam/qr-code-backend
   pullPolicy: IfNotPresent
-  tag: main-db59f73db482fd8f2c89116ebfea1fb25d76aa4c
+  tag: main-d745535b74f24dd45385f308c2bfb5d9c569a76e
 service:
   port: 3001
   targetPort: 3000
